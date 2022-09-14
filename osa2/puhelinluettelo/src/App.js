@@ -24,10 +24,10 @@ const App = () => {
   const addPerson = (event) => {
     event.preventDefault();
     const personObject = {
-      name: newName,
-      number: newNumber
+      name: newName.trim(),
+      number: newNumber.trim()
     }
-    const personToUpdate = persons.find(person => person.name.toLowerCase() === newName.toLowerCase())
+    const personToUpdate = persons.find(person => person.name.toLowerCase() === newName.toLowerCase().trim())
     
     if (personToUpdate) {
       if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
@@ -103,7 +103,7 @@ const App = () => {
   }}
 
 const handleNameChange = (event) => {
-  setNewName(event.target.value)
+  setNewName(event.target.value.replace(/ +/g, " "))
 }
 
 const handleNumberChange = (event) => {

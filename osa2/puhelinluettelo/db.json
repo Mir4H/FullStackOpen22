@@ -1,9 +1,19 @@
 {
   "persons": [
     {
-      "name": "aa",
-      "number": "44",
+      "name": "Harri Hanhi",
+      "number": "123",
       "id": 1
+    },
+    {
+      "name": "Saku Sorsa",
+      "number": "456",
+      "id": 2
+    },
+    {
+      "name": "Ilmari Iilimato",
+      "number": "789",
+      "id": 3
     }
   ]
 }
