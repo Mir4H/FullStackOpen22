@@ -15,15 +15,15 @@ const ShowCountry = ({ country }) => {
   const api_key = process.env.REACT_APP_API_KEY
   const address = `https://api.openweathermap.org/data/2.5/weather?q=${country.name.common.toLowerCase()}&appid=${api_key}`
   console.log(address)
-useEffect(() => {
-  axios
-    .get(address)
-    .then(response => {
-      setWeather(response.data)
-  console.log(weather)
-}).catch((error) =>
-	console.error(error))
-}, [address])
+  useEffect(() => {
+    axios
+      .get(address)
+      .then(response => {
+        setWeather(response.data)
+    console.log(weather)
+    }).catch((error) =>
+	    console.error(error))
+  }, [address])
 
   console.log(weather)
   return(
@@ -31,13 +31,13 @@ useEffect(() => {
     <h2>{country.name.common}</h2>
     <p>Capital: {country.capital}<br/>Area: {country.area}</p>
     <h4>Languages:</h4>
-    <ul>
-      {Object.values(country.languages).map((language) => <li key={language}>{language}</li>)}
-    </ul>
+      <ul>
+        {Object.values(country.languages).map((language) => <li key={language}>{language}</li>)}
+      </ul>
     <img alt={country.name.common} src={country.flags.png}/>
     {!weather ? <h4>No weather information available for {country.capital} at the moment</h4> : <><h3>Weather in {country.capital}</h3>
     <p>Temperature {(weather.main.temp-273.15).toFixed(2)} Celcius</p>
-    <img src={`http://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`}/>
+    <img alt={weather.weather[0].icon} src={`http://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`}/>
     <p>Wind {weather.wind.speed.toFixed(2)} m/s</p></>}
   </div>
 )}
