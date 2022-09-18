@@ -1,7 +1,9 @@
-const Filter = ({handleChange}) => (
-    <div> 
+import React from 'react'
+
+const Filter = ({ handleChange }) => (
+  <div>
       Filter shown with: <input onChange={handleChange}/>
-    </div>
-    )
+  </div>
+)
 
 export default Filter

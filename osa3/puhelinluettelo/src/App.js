@@ -1,3 +1,4 @@
+import React from 'react'
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import personService from './services/persons'
@@ -22,13 +23,13 @@ const App = () => {
   }, [])
 
   const addPerson = (event) => {
-    event.preventDefault();
+    event.preventDefault()
     const personObject = {
       name: newName.trim(),
       number: newNumber.trim()
     }
     const personToUpdate = persons.find(person => person.name.toLowerCase() === newName.toLowerCase().trim())
-    
+
     if (personToUpdate) {
       if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
         personService
@@ -37,19 +38,19 @@ const App = () => {
             setPersons(persons.map(person => person.id !== returnedPerson.id ? person : returnedPerson))})
           .then(success => {
             setNotificationMessage({
-              message: `${personToUpdate.name} phonenumber updated`, 
-              type: "success"
-              })
+              message: `${personToUpdate.name} phonenumber updated`,
+              type: 'success'
+            })
             setTimeout(() => {
               setNotificationMessage(null)
             }, 5000)})
           .catch(error => {
             setNotificationMessage({
-              message: `${error.response.data.error}`, 
-              type: "error"
+              message: `${error.response.data.error}`,
+              type: 'error'
             })
             setTimeout(() => {
-            setNotificationMessage(null)
+              setNotificationMessage(null)
             }, 5000)
           })
       }
@@ -58,29 +59,29 @@ const App = () => {
     } else {
       personService
         .create(personObject)
-          .then(personCreated => {
-            setPersons(persons.concat(personCreated))
+        .then(personCreated => {
+          setPersons(persons.concat(personCreated))
+        })
+        .then(success => {
+          setNotificationMessage({
+            message: `${personObject.name} created`,
+            type: 'success'
           })
-          .then(success => {
-            setNotificationMessage({
-              message: `${personObject.name} created`, 
-              type: "success"
-            })
-            setTimeout(() => {
+          setTimeout(() => {
             setNotificationMessage(null)
-            }, 5000)
+          }, 5000)
+        })
+        .catch(error => {
+          setNotificationMessage({
+            message: `${error.response.data.error}`,
+            type: 'error'
           })
-          .catch(error => {
-            setNotificationMessage({
-              message: `${error.response.data.error}`, 
-              type: "error"
-            })
-            setTimeout(() => {
+          setTimeout(() => {
             setNotificationMessage(null)
-            }, 5000)
-          })
-        setNewName('')
-        setNewNumber('')
+          }, 5000)
+        })
+      setNewName('')
+      setNewNumber('')
     }
   }
 
@@ -88,50 +89,50 @@ const App = () => {
     const name = persons.find(p => p.id === id)
     if (window.confirm(`Do you really want to delete ${name.name}`)) {
       personService
-      .deleteFromDb(id)
+        .deleteFromDb(id)
         .then(
           setPersons(persons.filter(p => p.id !== id)))
         .then(success => {
           setNotificationMessage({
-            message: `${name.name} deleted`, 
-            type: "success"
+            message: `${name.name} deleted`,
+            type: 'success'
           })
           setTimeout(() => {
-          setNotificationMessage(null)
+            setNotificationMessage(null)
           }, 5000)})
         .catch(error => {
           setNotificationMessage({
-            message: `${name.name} has already been deleted`, 
-            type: "error"
+            message: `${name.name} has already been deleted`,
+            type: 'error'
           })
           setPersons(persons.filter(p => p.id !== name.id))
           setTimeout(() => {
             setNotificationMessage(null)
-          }, 5000)}) 
-  }}
+          }, 5000)})
+    }}
 
-const handleNameChange = (event) => {
-  setNewName(event.target.value.replace(/ +/g, " "))
-}
+  const handleNameChange = (event) => {
+    setNewName(event.target.value.replace(/ +/g, ' '))
+  }
 
-const handleNumberChange = (event) => {
-  setNewNumber(event.target.value)
-}
+  const handleNumberChange = (event) => {
+    setNewNumber(event.target.value)
+  }
 
-const handleNameFilter = (event) => {
-  setSearch(event.target.value.toLowerCase())
-}
+  const handleNameFilter = (event) => {
+    setSearch(event.target.value.toLowerCase())
+  }
 
-return (
-  <div>
-    <Notification message={notificationMessage} />
-    <h2>Phonebook</h2>
-    <Filter handleChange={handleNameFilter}/>
-    <h2>Add a new</h2>
-    <Form addPerson={addPerson} newName={newName} handleNameChange={handleNameChange} newNumber={newNumber} handleNumberChange={handleNumberChange}/>
-    <h2>Numbers</h2>
-    <Persons persons={persons} search={search} deletePerson={deletePerson}/>
-  </div>
-)}
+  return (
+    <div>
+      <Notification message={notificationMessage} />
+      <h2>Phonebook</h2>
+      <Filter handleChange={handleNameFilter}/>
+      <h2>Add a new</h2>
+      <Form addPerson={addPerson} newName={newName} handleNameChange={handleNameChange} newNumber={newNumber} handleNumberChange={handleNumberChange}/>
+      <h2>Numbers</h2>
+      <Persons persons={persons} search={search} deletePerson={deletePerson}/>
+    </div>
+  )}
 
 export default App
