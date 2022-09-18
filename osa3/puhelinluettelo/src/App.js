@@ -11,7 +11,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [search, setSearch] = useState('')
-  const [errorMessage, setErrorMessage] = useState(null)
+  const [notificationMessage, setNotificationMessage] = useState(null)
 
   useEffect(() => {
     personService
@@ -35,40 +35,48 @@ const App = () => {
           .update(personToUpdate.id, personObject)
           .then(returnedPerson => {
             setPersons(persons.map(person => person.id !== returnedPerson.id ? person : returnedPerson))})
-          .then(error => {
-            setErrorMessage({
+          .then(success => {
+            setNotificationMessage({
               message: `${personToUpdate.name} phonenumber updated`, 
               type: "success"
               })
             setTimeout(() => {
-              setErrorMessage(null)
+              setNotificationMessage(null)
             }, 5000)})
           .catch(error => {
-            setErrorMessage({
-              message: `${personToUpdate.name} has already been deleted`, 
+            setNotificationMessage({
+              message: `${error.response.data.error}`, 
               type: "error"
             })
-            setPersons(persons.filter(p => p.id !== personToUpdate.id))
             setTimeout(() => {
-              setErrorMessage(null)
+            setNotificationMessage(null)
             }, 5000)
-          })    
+          })
       }
       setNewName('')
       setNewNumber('')
     } else {
       personService
         .create(personObject)
-          .then(returnedPerson => {
-            setPersons(persons.concat(returnedPerson))
+          .then(personCreated => {
+            setPersons(persons.concat(personCreated))
           })
-          .then(error => {
-            setErrorMessage({
+          .then(success => {
+            setNotificationMessage({
               message: `${personObject.name} created`, 
               type: "success"
             })
             setTimeout(() => {
-            setErrorMessage(null)
+            setNotificationMessage(null)
+            }, 5000)
+          })
+          .catch(error => {
+            setNotificationMessage({
+              message: `${error.response.data.error}`, 
+              type: "error"
+            })
+            setTimeout(() => {
+            setNotificationMessage(null)
             }, 5000)
           })
         setNewName('')
@@ -83,22 +91,22 @@ const App = () => {
       .deleteFromDb(id)
         .then(
           setPersons(persons.filter(p => p.id !== id)))
-        .then(error => {
-          setErrorMessage({
+        .then(success => {
+          setNotificationMessage({
             message: `${name.name} deleted`, 
             type: "success"
           })
           setTimeout(() => {
-          setErrorMessage(null)
+          setNotificationMessage(null)
           }, 5000)})
         .catch(error => {
-          setErrorMessage({
+          setNotificationMessage({
             message: `${name.name} has already been deleted`, 
             type: "error"
           })
           setPersons(persons.filter(p => p.id !== name.id))
           setTimeout(() => {
-            setErrorMessage(null)
+            setNotificationMessage(null)
           }, 5000)}) 
   }}
 
@@ -116,7 +124,7 @@ const handleNameFilter = (event) => {
 
 return (
   <div>
-    <Notification message={errorMessage} />
+    <Notification message={notificationMessage} />
     <h2>Phonebook</h2>
     <Filter handleChange={handleNameFilter}/>
     <h2>Add a new</h2>
