@@ -1,12 +1,12 @@
-import { useState } from 'react' 
+import { useState } from 'react'
 
 const NewBlogForm = ({ addNewBlog }) => {
 
-const [title, setTitle] = useState('')
-const [author, setAuthor] = useState('')
-const [url, setUrl] = useState('')
+  const [title, setTitle] = useState('')
+  const [author, setAuthor] = useState('')
+  const [url, setUrl] = useState('')
 
-const addBlog = (event) => {
+  const addBlog = (event) => {
     event.preventDefault()
     addNewBlog({
       title: title.trim(),
@@ -18,9 +18,9 @@ const addBlog = (event) => {
     setUrl('')
   }
 
-return (
+  return (
     <>
-    <h2>Create a new blog</h2>
+      <h2>Create a new blog</h2>
       <form onSubmit={addBlog}>
         <div>
           Title
@@ -33,8 +33,8 @@ return (
         </div>
         <div>
           Author
-            <br/>
-            <input
+          <br/>
+          <input
             type="text"
             value={author}
             onChange={({ target }) => setAuthor(target.value)}
@@ -42,16 +42,17 @@ return (
         </div>
         <div>
           Url
-            <br/>
-            <input
+          <br/>
+          <input
             type="text"
             value={url}
             onChange={({ target }) => setUrl(target.value)}
           />
         </div>
         <button type="submit">create</button>
-      </form>     
-    </> 
+      </form>
+    </>
   )
 }
+
 export default NewBlogForm
