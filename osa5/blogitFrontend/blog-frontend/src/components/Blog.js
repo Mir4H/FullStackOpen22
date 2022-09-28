@@ -25,7 +25,7 @@ const Blog = ({ blog, addLike, deleteBlog, userName }) => {
   return (
     <div style={blogStyle} className="blog">
       {visible ?
-        <div>
+        <div id='details'>
           <div style={itemStyle} onClick={showDetails}>{blog.title} | {blog.author} <button onClick={showDetails}>Hide</button></div>
           <div style={itemStyle}>{blog.url}</div>
           <div style={itemStyle}>{blog.likes} <button onClick={() => addLike(blog)}>Like</button></div>
