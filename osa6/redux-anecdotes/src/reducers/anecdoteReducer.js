@@ -1,5 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit"
-import axios from "axios"
+import { createSlice } from '@reduxjs/toolkit'
+import axios from 'axios'
 import anecdoteService from '../services/anecdotes'
 
 const anecdoteSlice = createSlice({
@@ -9,11 +9,11 @@ const anecdoteSlice = createSlice({
     voteAnecdote(state, action) {
       const id = action.payload.id
       const changedAnecdote = action.payload
-    return state.map(anecdote => anecdote.id !== id ? anecdote : changedAnecdote)
+      return state.map(anecdote => anecdote.id !== id ? anecdote : changedAnecdote)
     },
     appendAnecdote(state, action) {
       state.push(action.payload)
-    }, 
+    },
     setAnecdotes(state, action) {
       return action.payload
     }
@@ -37,7 +37,7 @@ export const createAnecdote = content => {
 }
 
 export const addLike = (anecdote) => {
-  const updated = {...anecdote, votes: anecdote.votes + 1}
+  const updated = { ...anecdote, votes: anecdote.votes + 1 }
   return async dispatch => {
     const updatedLikes = await anecdoteService.addLikes(anecdote.id, updated)
     console.log(updatedLikes)

@@ -1,15 +1,15 @@
 import { useSelector, useDispatch } from 'react-redux'
 import { addLike } from '../reducers/anecdoteReducer'
-import { showNotificationAsync } from '../reducers/notifyReducer'
+import { setNotify } from '../reducers/notifyReducer'
 
 const Anecdote = ({ anecdote, vote }) => {
   return (
     <div>
       <div>{anecdote.content}</div>
       <div>has {anecdote.votes} votes<br/>
-      <button onClick={() => vote(anecdote.id)}>vote</button></div>
+        <button onClick={() => vote(anecdote.id)}>vote</button></div>
     </div>
-    )
+  )
 }
 
 const Anecdotes = () => {
@@ -22,7 +22,7 @@ const Anecdotes = () => {
   const vote = (anecdote) => {
     console.log(anecdote)
     dispatch(addLike(anecdote))
-    dispatch(showNotificationAsync(`You voted: ${anecdote.content}`, 5))
+    dispatch(setNotify(`You voted: ${anecdote.content}`, 5))
   }
 
   return (
@@ -32,7 +32,7 @@ const Anecdotes = () => {
           key={anecdote.id}
           anecdote={anecdote}
           vote={() => vote(anecdote)
-        }/>
+          }/>
       )}
     </div>
   )
