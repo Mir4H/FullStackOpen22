@@ -1,8 +1,6 @@
 import { useState } from 'react'
-import {
-  BrowserRouter as Router,
-  Routes, Route, Link, useParams, useNavigate, useMatch
-} from "react-router-dom"
+import { Routes, Route, useNavigate, useMatch } from "react-router-dom"
+import  { useField } from './hooks'
 
 const Menu = () => {
   const padding = {
@@ -62,21 +60,29 @@ const Footer = () => (
 )
 
 const CreateNew = ({ addNew }) => {
-  const [content, setContent] = useState('')
-  const [author, setAuthor] = useState('')
-  const [info, setInfo] = useState('')
+
+  const {reset: removeContent, ...content} = useField('text')
+  const {reset: removeAuthor, ...author} = useField('text')
+  const {reset: removeInfo, ...info} = useField('text')
 
   const navigate = useNavigate()
 
   const handleSubmit = (e) => {
     e.preventDefault()
     addNew({
-      content,
-      author,
-      info,
+      content: content.value,
+      author: author.value,
+      info: info.value,
       votes: 0
     })
-  navigate('/')
+    navigate('/')
+  }
+
+  const resetValues = (e) => {
+    e.preventDefault()
+    removeContent()
+    removeAuthor()
+    removeInfo()
   }
 
   return (
@@ -85,22 +91,23 @@ const CreateNew = ({ addNew }) => {
       <form onSubmit={handleSubmit}>
         <div>
           content
-          <input name='content' value={content} onChange={(e) => setContent(e.target.value)} />
+          <input {...content}/>
         </div>
         <div>
           author
-          <input name='author' value={author} onChange={(e) => setAuthor(e.target.value)} />
+          <input {...author} />
         </div>
         <div>
           url for more info
-          <input name='info' value={info} onChange={(e)=> setInfo(e.target.value)} />
+          <input {...info} />
         </div>
-        <button>create</button>
+        <button>create</button><button onClick={resetValues}>reset</button>
       </form>
     </div>
   )
 
 }
+
 
 const ShowAnecdote = ({ anecdote, vote }) => {
   return (
@@ -128,7 +135,6 @@ const App = () => {
       id: 2
     }
   ])
-
   const [notification, setNotification] = useState('')
 
   const match = useMatch('/anecdotes/:id')
@@ -169,7 +175,7 @@ const App = () => {
         <Route path='/anecdotes/:id' element={<ShowAnecdote anecdote={anecdote} vote={vote} />}></Route>
         <Route path='/' element={<AnecdoteList anecdotes={anecdotes} />}></Route>
         <Route path='/about'element={<About />}></Route>
-        <Route path='/create'element={<CreateNew addNew={addNew}/>}></Route>
+        <Route path='/create'element={<CreateNew addNew={addNew} />}></Route>
       </Routes>
       <Footer />
     </div>
