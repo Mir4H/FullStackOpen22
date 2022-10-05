@@ -1,17 +1,29 @@
 import { useState } from 'react'
-import { Routes, Route, useNavigate, useMatch } from "react-router-dom"
+import { Routes, Route, useNavigate, Link, useMatch } from "react-router-dom"
 import  { useField } from './hooks'
+import { Table, Form, Button, Alert, Navbar, Nav, Container } from 'react-bootstrap'
 
 const Menu = () => {
-  const padding = {
-    paddingRight: 5
-  }
+  
   return (
-    <div>
-      <a href='/' style={padding}>anecdotes</a>
-      <a href='/create' style={padding}>create new</a>
-      <a href='/about' style={padding}>about</a>
-    </div>
+    <Navbar collapseOnSelect expand="lg" bg="light">
+      <Container>
+      <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+        <Navbar.Collapse id="responsive-navbar-nav">
+          <Nav className="me-auto">
+            <Nav.Link href='/' to='/' as={Link}>
+              anecdotes
+            </Nav.Link>
+            <Nav.Link href='/create' to='/create' as={Link}>
+              create new
+            </Nav.Link>
+            <Nav.Link href='/about' to='/about' as={Link}>
+              about
+            </Nav.Link>
+          </Nav>
+        </Navbar.Collapse>
+        </Container>
+      </Navbar>
   )
 }
 
@@ -21,9 +33,12 @@ const Notification = ({ message }) => {
   }
 
   return (
-    <div style={{fontSize: 20, fontWeight: 'bold', color: 'green'}}>
-      {message}
-      <br/>
+    <div>
+      {(message && 
+      <Alert variant='success'>
+        {message}
+      </Alert>  
+    )}
     </div>
   )
 }
@@ -31,9 +46,16 @@ const Notification = ({ message }) => {
 const AnecdoteList = ({ anecdotes }) => (
   <div>
     <h2>Anecdotes</h2>
-    <ul>
-      {anecdotes.map(anecdote => <li key={anecdote.id} ><a href={`/anecdotes/${anecdote.id}`}>{anecdote.content}</a></li>)}
-    </ul>
+    <Table striped>
+      <tbody>
+      {anecdotes.map(anecdote => 
+        <tr key={anecdote.id} >
+          <td>
+            <Link to={`/anecdotes/${anecdote.id}`}>{anecdote.content}</Link>
+          </td>
+        </tr>)}
+      </tbody>
+    </Table>
   </div>
 )
 
@@ -88,21 +110,18 @@ const CreateNew = ({ addNew }) => {
   return (
     <div>
       <h2>create a new anecdote</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          content
-          <input {...content}/>
-        </div>
-        <div>
-          author
-          <input {...author} />
-        </div>
-        <div>
-          url for more info
-          <input {...info} />
-        </div>
-        <button>create</button><button onClick={resetValues}>reset</button>
-      </form>
+      <Form onSubmit={handleSubmit}>
+        <Form.Group>
+          <Form.Label>content</Form.Label>
+            <Form.Control {...content}/>
+          <Form.Label>author</Form.Label>
+            <Form.Control {...author} />
+          <Form.Label>url for more info</Form.Label>
+            <Form.Control {...info} />
+          <Button variant="primary" type="submit">create</Button>
+          <Button onClick={resetValues}>reset</Button>
+        </Form.Group>
+      </Form>
     </div>
   )
 
@@ -167,7 +186,7 @@ const App = () => {
   }
 
   return (
-    <div>
+    <div className="container">
       <h1>Software anecdotes</h1>
       <Menu />
       <Notification message={notification}/>
