@@ -1,50 +1,63 @@
 import { useParams } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { deleteBlog, addLikes } from '../reducers/blogsReducer'
 import { setNotify } from '../reducers/notifyReducer'
 import { useNavigate } from 'react-router-dom'
+import { useEffect, useState } from 'react'
 
-const BlogDetails = ({ blogs, user }) => {
+const BlogDetails = () => {
+  const [currentBlog, setCurrentBlog] = useState(null)
+  const [username, setUsername] = useState(null)
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const id = useParams().id
-  const blog = blogs.filter((b) => b.id === id)
+  const blogs = useSelector((state) => state.blogs)
+  const user = useSelector((state) => state.user)
 
-  const removeBlog = (id) => {
-    const toRemove = blogs.find((b) => b.id === id)
+  useEffect(() => {
+    setCurrentBlog(blogs.find((b) => b.id === id))
+  }, [blogs])
+
+  useEffect(() => {
+    setUsername(user.username)
+  }, [user])
+
+  const removeBlog = () => {
     const ok = window.confirm(
-      `remove '${toRemove.title}' by ${toRemove.author}?`
+      `remove '${currentBlog.title}' by ${currentBlog.author}?`
     )
-
     if (!ok) {
       return
     }
-    dispatch(deleteBlog(toRemove))
+    dispatch(deleteBlog(currentBlog))
     navigate('/')
   }
 
-  const likeBlog = (blog) => {
-    dispatch(addLikes(blog.id))
-    dispatch(setNotify(`you liked '${blog.title}' by ${blog.author}`, 5))
+  const likeBlog = () => {
+    dispatch(addLikes(currentBlog.id))
+    dispatch(
+      setNotify(`you liked '${currentBlog.title}' by ${currentBlog.author}`, 5)
+    )
   }
-  console.log(blog)
-  if (!blog) {
+
+  if (!currentBlog || !username) {
     return null
   }
+
   return (
     <div>
-      <h2>{blog[0].title}</h2>
+      <h2>{currentBlog.title}</h2>
       <p>
-        Link to Blog: <a href={blog[0].url}>{blog[0].url}</a>
+        Link to Blog: <a href={currentBlog.url}>{currentBlog.url}</a>
       </p>
       <div>
-        The blog has {blog[0].likes} likes{' '}
-        <button onClick={() => likeBlog(blog[0])}>like</button>
+        The blog has {currentBlog.likes} likes{' '}
+        <button onClick={likeBlog}>like</button>
       </div>
       <div>
-        <p>Added by {blog[0].user.name}</p>
-        {blog[0].user.name === user.name ? (
-          <button onClick={() => removeBlog(blog[0].id)}>remove</button>
+        <p>Added by {currentBlog.user.name}</p>
+        {currentBlog.user.username === username ? (
+          <button onClick={removeBlog}>remove</button>
         ) : null}
       </div>
     </div>
@@ -52,11 +65,3 @@ const BlogDetails = ({ blogs, user }) => {
 }
 
 export default BlogDetails
-
-/*
-      <div>
-        {blog.likes} likes{' '}
-        <button onClick={() => likeBlog(blog.id)}>like</button>
-      </div>
-      {own && <button onClick={() => removeBlog(blog.id)}>remove</button>}
-      */

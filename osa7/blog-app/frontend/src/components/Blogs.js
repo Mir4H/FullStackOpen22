@@ -1,10 +1,7 @@
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
-//import { deleteBlog, addLikes } from '../reducers/blogsReducer'
-//import { setNotify } from '../reducers/notifyReducer'
 
 const Blog = ({ blog }) => {
-  //, likeBlog, removeBlog, user
   const style = {
     padding: 3,
     margin: 5,

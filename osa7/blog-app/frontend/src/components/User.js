@@ -15,8 +15,7 @@ const User = () => {
   return (
     <div>
       <h1>blogs</h1>
-      {user.name} logged in
-      <button onClick={logout}> logout</button>
+      {user.name} logged in <button onClick={logout}> logout</button>
     </div>
   )
 }

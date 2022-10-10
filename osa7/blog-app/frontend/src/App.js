@@ -80,10 +80,7 @@ const App = () => {
           path="/users/:id"
           element={<UserDetails users={users} blogs={blogs} />}
         />
-        <Route
-          path="/blogs/:id"
-          element={<BlogDetails blogs={blogs} user={user} />}
-        />
+        <Route path="/blogs/:id" element={<BlogDetails user={user} />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </div>
