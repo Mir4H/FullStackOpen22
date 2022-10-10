@@ -63,8 +63,6 @@ export const deleteBlog = (blogToDelete) => {
     try {
       await blogService.remove(blogToDelete.id)
       dispatch(removeBlog(blogToDelete.id))
-      /*const updatedBlogs = await blogService.getAll()
-      dispatch(setBlogs(updatedBlogs))*/
       dispatch(
         setNotify(
           `you removed '${blogToDelete.title}' by ${blogToDelete.author}`,

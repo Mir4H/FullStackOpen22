@@ -7,6 +7,7 @@ const Home = () => {
   const blogFormRef = useRef()
   return (
     <>
+      <h2>Blog list</h2>
       <Togglable buttonLabel="new blog" ref={blogFormRef}>
         <NewBlogForm />
       </Togglable>
