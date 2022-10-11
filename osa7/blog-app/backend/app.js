@@ -8,6 +8,7 @@ require('express-async-errors')
 const blogsRouter = require('./controllers/blogs')
 const usersRouter = require('./controllers/users')
 const loginRouter = require('./controllers/login')
+
 const { errorHandler, userExtractor } = require('./utils/middleware')
 const logger = require('./utils/logger')
 

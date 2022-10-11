@@ -44,6 +44,8 @@ const BlogDetails = () => {
     return null
   }
 
+  const blogComments = currentBlog.comments
+
   return (
     <div>
       <h2>{currentBlog.title}</h2>
@@ -60,6 +62,16 @@ const BlogDetails = () => {
           <button onClick={removeBlog}>remove</button>
         ) : null}
       </div>
+      {blogComments.length !== 0 ? (
+        <div>
+          <h3>Comments:</h3>
+          <ul>
+            {blogComments.map((comment) => (
+              <li key={comment.id}>{comment.content}</li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
     </div>
   )
 }
