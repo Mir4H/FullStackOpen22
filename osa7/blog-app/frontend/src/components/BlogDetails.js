@@ -1,7 +1,6 @@
 import { useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { deleteBlog, addLikes } from '../reducers/blogsReducer'
-import { setNotify } from '../reducers/notifyReducer'
+import { deleteBlog, addLikeBlog } from '../reducers/blogsReducer'
 import { useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 
@@ -34,10 +33,7 @@ const BlogDetails = () => {
   }
 
   const likeBlog = () => {
-    dispatch(addLikes(currentBlog.id))
-    dispatch(
-      setNotify(`you liked '${currentBlog.title}' by ${currentBlog.author}`, 5)
-    )
+    dispatch(addLikeBlog(currentBlog))
   }
 
   if (!currentBlog || !username) {

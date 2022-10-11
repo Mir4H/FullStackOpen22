@@ -21,13 +21,19 @@ const create = async (newObject) => {
   return response.data
 }
 
-const update = (id, newObject) => {
-  const request = axios.put(`${baseUrl}/${id}`, newObject)
-  return request.then((response) => response.data)
+const update = async (id, update) => {
+  const response = await axios.put(`${baseUrl}/${id}`, update)
+  return response.data
 }
 
-const remove = (id) => {
-  return axios.delete(`${baseUrl}/${id}`, config())
+const remove = async (id) => {
+  const response = axios.delete(`${baseUrl}/${id}`, config())
+  return response.data
 }
 
-export default { getAll, create, update, remove }
+const addComment = async (id, comment) => {
+  const response = await axios.post(`${baseUrl}/${id}/comments`, comment)
+  return response.data
+}
+
+export default { getAll, create, update, remove, addComment }

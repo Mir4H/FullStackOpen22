@@ -8,13 +8,8 @@ const blogSlice = createSlice({
   initialState: [],
   reducers: {
     addLikes(state, action) {
-      const id = action.payload
-      const blogToChange = state.find((b) => b.id === id)
-      const changedBlog = {
-        ...blogToChange,
-        likes: (blogToChange.likes || 0) + 1
-      }
-      return state.map((blog) => (blog.id !== id ? blog : changedBlog))
+      const id = action.payload.id
+      return state.map((blog) => (blog.id !== id ? blog : action.payload))
     },
     appendBlogs(state, action) {
       state.push(action.payload)
@@ -34,6 +29,29 @@ export const initialBlogs = () => {
   return async (dispatch) => {
     const blogs = await blogService.getAll()
     dispatch(setBlogs(blogs))
+  }
+}
+
+export const addLikeBlog = (blogToLike) => {
+  return async (dispatch) => {
+    const changedLikes = {
+      likes: blogToLike.likes + 1
+    }
+    try {
+      const likedBlog = await blogService.update(blogToLike.id, changedLikes)
+      dispatch(addLikes(likedBlog))
+      dispatch(
+        setNotify(`you liked '${blogToLike.title}' by ${blogToLike.author}`, 5)
+      )
+    } catch (error) {
+      dispatch(
+        setNotify(
+          'failed to add like: ' + error.response.data.error,
+          5,
+          'alert'
+        )
+      )
+    }
   }
 }
 
