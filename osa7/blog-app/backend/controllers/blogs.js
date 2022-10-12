@@ -51,6 +51,7 @@ router.delete('/:id', async (request, response) => {
   }
 
   await Blog.findByIdAndRemove(request.params.id)
+  await Comment.deleteMany({ blog: blogToDelete.id })
 
   response.status(204).end()
 })
@@ -69,7 +70,6 @@ router.put('/:id', async (request, response) => {
 
 router.post('/:id/comments', async (request, response) => {
   const body = request.body
-
   const blog = await Blog.findById(request.params.id)
 
   const comment = new Comment({
@@ -79,8 +79,11 @@ router.post('/:id/comments', async (request, response) => {
   const savedComment = await comment.save()
   blog.comments = blog.comments.concat(savedComment._id)
   await blog.save()
+  const updatedBlog = await Blog.findById(request.params.id)
+    .populate('comments', { content: 1 })
+    .populate('user', { username: 1, name: 1 })
 
-  response.status(201).json(savedComment)
+  response.status(201).json(updatedBlog)
 })
 
 router.get('/:id/comments', async (request, response) => {

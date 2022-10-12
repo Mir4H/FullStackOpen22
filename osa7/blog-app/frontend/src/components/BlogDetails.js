@@ -3,10 +3,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import { deleteBlog, addLikeBlog } from '../reducers/blogsReducer'
 import { useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
+import { addCommentBlog } from '../reducers/blogsReducer'
 
 const BlogDetails = () => {
   const [currentBlog, setCurrentBlog] = useState(null)
   const [username, setUsername] = useState(null)
+  const [comment, setComment] = useState('')
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const id = useParams().id
@@ -36,11 +38,15 @@ const BlogDetails = () => {
     dispatch(addLikeBlog(currentBlog))
   }
 
+  const handleSubmit = (event) => {
+    event.preventDefault()
+    dispatch(addCommentBlog(currentBlog, { content: comment }))
+    setComment('')
+  }
+
   if (!currentBlog || !username) {
     return null
   }
-
-  const blogComments = currentBlog.comments
 
   return (
     <div>
@@ -58,11 +64,25 @@ const BlogDetails = () => {
           <button onClick={removeBlog}>remove</button>
         ) : null}
       </div>
-      {blogComments.length !== 0 ? (
+      <div>
+        <h2>Comment the blog</h2>
+        <form onSubmit={handleSubmit}>
+          <div>
+            comment
+            <input
+              value={comment}
+              onChange={({ target }) => setComment(target.value)}
+              id="comment"
+            />
+          </div>
+          <button type="submit">send</button>
+        </form>
+      </div>
+      {currentBlog.comments.length !== 0 ? (
         <div>
           <h3>Comments:</h3>
           <ul>
-            {blogComments.map((comment) => (
+            {currentBlog.comments.map((comment) => (
               <li key={comment.id}>{comment.content}</li>
             ))}
           </ul>

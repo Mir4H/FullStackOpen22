@@ -7,7 +7,7 @@ const blogSlice = createSlice({
   name: 'blogs',
   initialState: [],
   reducers: {
-    addLikes(state, action) {
+    updateBlog(state, action) {
       const id = action.payload.id
       return state.map((blog) => (blog.id !== id ? blog : action.payload))
     },
@@ -23,7 +23,8 @@ const blogSlice = createSlice({
   }
 })
 
-export const { appendBlogs, setBlogs, addLikes, removeBlog } = blogSlice.actions
+export const { appendBlogs, setBlogs, updateBlog, removeBlog } =
+  blogSlice.actions
 
 export const initialBlogs = () => {
   return async (dispatch) => {
@@ -39,7 +40,7 @@ export const addLikeBlog = (blogToLike) => {
     }
     try {
       const likedBlog = await blogService.update(blogToLike.id, changedLikes)
-      dispatch(addLikes(likedBlog))
+      dispatch(updateBlog(likedBlog))
       dispatch(
         setNotify(`you liked '${blogToLike.title}' by ${blogToLike.author}`, 5)
       )
@@ -91,6 +92,18 @@ export const deleteBlog = (blogToDelete) => {
       dispatch(
         setNotify(`failed to delete '${blogToDelete.title}' `, 5, 'alert')
       )
+    }
+  }
+}
+
+export const addCommentBlog = (blog, comment) => {
+  return async (dispatch) => {
+    try {
+      const updated = await blogService.addComment(blog.id, comment)
+      dispatch(updateBlog(updated))
+      dispatch(setNotify(`you commented '${blog.title}' by ${blog.author}`, 5))
+    } catch (error) {
+      dispatch(setNotify(`failed to comment: ${blog.title}`, 5, 'alert'))
     }
   }
 }
