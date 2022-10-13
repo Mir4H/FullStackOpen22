@@ -1,9 +1,17 @@
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { deleteBlog, addLikeBlog } from '../reducers/blogsReducer'
-import { useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { addCommentBlog } from '../reducers/blogsReducer'
+import {
+  Link,
+  Button,
+  TextField,
+  Grid,
+  List,
+  ListItem,
+  ListItemText
+} from '@mui/material/'
 
 const BlogDetails = () => {
   const [currentBlog, setCurrentBlog] = useState(null)
@@ -49,46 +57,78 @@ const BlogDetails = () => {
   }
 
   return (
-    <div>
-      <h2>{currentBlog.title}</h2>
-      <p>
-        Link to Blog: <a href={currentBlog.url}>{currentBlog.url}</a>
-      </p>
-      <div>
-        The blog has {currentBlog.likes} likes{' '}
-        <button onClick={likeBlog}>like</button>
-      </div>
-      <div>
-        <p>Added by {currentBlog.user.name}</p>
-        {currentBlog.user.username === username ? (
-          <button onClick={removeBlog}>remove</button>
-        ) : null}
-      </div>
-      <div>
-        <h2>Comment the blog</h2>
-        <form onSubmit={handleSubmit}>
-          <div>
-            comment
-            <input
+    <Grid container={true}>
+      <Grid item md={7} xs={12}>
+        <h2>{currentBlog.title}</h2>
+        <p>
+          Link to Blog:{' '}
+          <Link underline="hover" href={currentBlog.url}>
+            {currentBlog.url}
+          </Link>
+        </p>
+        <div>
+          The blog has {currentBlog.likes} likes{' '}
+          <Button
+            id="likebutton"
+            variant="outlined"
+            size="small"
+            onClick={likeBlog}
+          >
+            like
+          </Button>
+        </div>
+        <div>
+          <p>Added by {currentBlog.user.name}</p>
+          {currentBlog.user.username === username ? (
+            <Button variant="outlined" size="small" onClick={removeBlog}>
+              remove
+            </Button>
+          ) : null}
+        </div>
+      </Grid>
+      <Grid item md={5} xs={12}>
+        <div>
+          <h2>Comment the blog</h2>
+          <p>Leave a comment</p>
+          <form onSubmit={handleSubmit}>
+            <TextField
+              sx={{ m: 1 }}
               value={comment}
               onChange={({ target }) => setComment(target.value)}
               id="comment"
             />
-          </div>
-          <button type="submit">send</button>
-        </form>
-      </div>
+            <br />
+
+            <Button
+              sx={{ m: 1 }}
+              variant="outlined"
+              size="medium"
+              type="submit"
+            >
+              send
+            </Button>
+          </form>
+        </div>
+      </Grid>
       {currentBlog.comments.length !== 0 ? (
         <div>
-          <h3>Comments:</h3>
-          <ul>
-            {currentBlog.comments.map((comment) => (
-              <li key={comment.id}>{comment.content}</li>
-            ))}
-          </ul>
+          <Grid>
+            <h2>Comments:</h2>
+            <List
+              sx={{
+                listStyleType: 'disc'
+              }}
+            >
+              {currentBlog.comments.map((comment) => (
+                <ListItem key={comment.id} sx={{ display: 'list-item' }}>
+                  <ListItemText primary={`${comment.content}`} />
+                </ListItem>
+              ))}
+            </List>
+          </Grid>
         </div>
       ) : null}
-    </div>
+    </Grid>
   )
 }
 

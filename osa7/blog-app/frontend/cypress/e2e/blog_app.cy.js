@@ -29,8 +29,6 @@ describe('Note ', function () {
       cy.get('#login-button').click()
 
       cy.get('#notification').contains('wrong username/password')
-      cy.get('#notification').should('have.css', 'border-style', 'solid')
-      cy.get('#notification').should('have.css', 'color', 'rgb(255, 0, 0)')
     })
   })
 
@@ -66,26 +64,19 @@ describe('Note ', function () {
           'https://www.cypress.io/blog/2021/08/04/authenticate-faster-in-tests-cy-session-command/',
         url: 'https://www.cypress.io/blog/2021/08/04/authenticate-faster-in-tests-cy-session-command/'
       })
-
-      /*
-      cy.contains('new blog').click()
-      cy.get('#title').type('Authenticate faster in tests with the cy.session command')
-      cy.get('#author').type('The Cypress team')
-      cy.get('#url').type('https://www.cypress.io/blog/2021/08/04/authenticate-faster-in-tests-cy-session-command/')
-      cy.contains('create').click()
-      */
     })
 
     it('it can be liked', function () {
-      cy.contains('view').click()
+      cy.get('.itemInlist').contains('Authenticate').click()
       cy.contains('0 likes')
-      cy.contains('like').click()
+      cy.get('#likebutton').click()
       cy.contains('1 likes')
     })
 
     it('creator can remove it', function () {
-      cy.contains('view').click()
+      cy.get('.itemInlist').contains('Authenticate').click()
       cy.contains('remove').click()
+      cy.get('#menubar').get('#home').click()
       cy.contains('The Cypress team').should('not.exist')
     })
 
@@ -96,11 +87,11 @@ describe('Note ', function () {
         password: 'sala'
       })
 
-      cy.contains('logout').click()
+      cy.get('#logout-button').click()
 
       cy.log_in('maski', 'sala')
 
-      cy.contains('view').click()
+      cy.get('.itemInlist').contains('Authenticate').click()
       cy.contains('remove').should('not.exist')
     })
   })
@@ -125,46 +116,48 @@ describe('Note ', function () {
         url: 'http://ccc.fi'
       })
 
-      cy.get('#notification').should('not.exist')
-
-      cy.contains('blog A').contains('view').click()
-      cy.contains('blog A').contains('like').as('like_a')
-
-      cy.contains('blog B').contains('view').click()
-      cy.contains('blog B').contains('like').as('like_b')
-
-      cy.contains('blog C').contains('view').click()
-      cy.contains('blog C').contains('like').as('like_c')
+      cy.contains('blog A').click()
+      cy.get('#likebutton').as('like_a')
 
       cy.get('@like_a').click()
       cy.contains("you liked 'blog A'")
-      cy.get('#notification').should('not.exist')
+      cy.get('#notification').should('exist')
+
+      cy.get('#menubar').get('#home').click()
+
+      cy.contains('blog B').click()
+      cy.get('#likebutton').as('like_b')
 
       cy.get('@like_b').click()
       cy.contains("you liked 'blog B'")
-      cy.get('#notification').should('not.exist')
+      cy.get('#notification').should('exist')
 
       cy.get('@like_b').click()
       cy.contains("you liked 'blog B'")
-      cy.get('#notification').should('not.exist')
+      cy.get('#notification').should('exist')
+
+      cy.get('#menubar').get('#home').click()
+
+      cy.contains('blog C').click()
+      cy.get('#likebutton').as('like_c')
 
       cy.get('@like_c').click()
       cy.contains("you liked 'blog C'")
-      cy.get('#notification').should('not.exist')
+      cy.get('#notification').should('exist')
 
       cy.get('@like_c').click()
       cy.contains("you liked 'blog C'")
-      cy.get('#notification').should('not.exist')
+      cy.get('#notification').should('exist')
 
       cy.get('@like_c').click()
       cy.contains("you liked 'blog C'")
-      cy.get('#notification').should('not.exist')
+      cy.get('#notification').should('exist')
 
-      cy.get('.blog').then((blogs) => {
-        expect(blogs.eq(0)).to.contain('blog C')
-        expect(blogs.eq(1)).to.contain('blog B')
-        expect(blogs.eq(2)).to.contain('blog A')
-      })
+      cy.get('#menubar').get('#home').click()
+
+      cy.get('.itemInlist').eq(0).should('contain', 'blog C')
+      cy.get('.itemInlist').eq(1).should('contain', 'blog B')
+      cy.get('.itemInlist').eq(2).should('contain', 'blog A')
     })
   })
 })

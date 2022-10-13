@@ -1,29 +1,34 @@
 import { useState } from 'react'
-import AppBar from '@mui/material/AppBar'
-import Box from '@mui/material/Box'
-import Toolbar from '@mui/material/Toolbar'
-import IconButton from '@mui/material/IconButton'
-import Typography from '@mui/material/Typography'
-import Menu from '@mui/material/Menu'
-import MenuIcon from '@mui/icons-material/Menu'
-import Container from '@mui/material/Container'
-import Button from '@mui/material/Button'
-import MenuItem from '@mui/material/MenuItem'
-import userService from '../services/user'
 import { useDispatch, useSelector } from 'react-redux'
+import { Link, useNavigate } from 'react-router-dom'
+import {
+  AppBar,
+  Box,
+  Toolbar,
+  IconButton,
+  Typography,
+  Menu,
+  Container,
+  Button,
+  MenuItem
+} from '@mui/material/'
+import MenuIcon from '@mui/icons-material/Menu'
+import userService from '../services/user'
 import { userData } from '../reducers/userReducer'
 import { setNotify } from '../reducers/notifyReducer'
-import { Link } from 'react-router-dom'
 
 const MenuBar = () => {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const [anchorElNav, setAnchorElNav] = useState(null)
   const user = useSelector((state) => state.user)
+
   const logout = () => {
     dispatch(userData(null))
     userService.clearUser()
-    dispatch(setNotify('good bye!', 5))
+    navigate('/login')
+    dispatch(setNotify('Good bye!', 5))
   }
-  const [anchorElNav, setAnchorElNav] = useState(null)
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget)
@@ -33,8 +38,36 @@ const MenuBar = () => {
     setAnchorElNav(null)
   }
 
+  if (user === null) {
+    return (
+      <AppBar position="static">
+        <Container maxWidth="xl">
+          <Toolbar disableGutters>
+            <Typography
+              variant="h6"
+              noWrap
+              component="a"
+              href="/"
+              sx={{
+                mr: 2,
+                display: { xs: 'flex', md: 'flex' },
+                fontFamily: 'monospace',
+                fontWeight: 700,
+                letterSpacing: '.3rem',
+                color: 'inherit',
+                textDecoration: 'none'
+              }}
+            >
+              BLOGS
+            </Typography>
+          </Toolbar>
+        </Container>
+      </AppBar>
+    )
+  }
+
   return (
-    <AppBar position="static">
+    <AppBar position="static" id="menubar">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Typography
@@ -118,6 +151,7 @@ const MenuBar = () => {
               component={Link}
               to="/"
               color="inherit"
+              id="home"
             >
               Home
             </Button>
@@ -149,7 +183,7 @@ const MenuBar = () => {
             </Typography>
           </Box>
           <Box sx={{ flexGrow: 0 }}>
-            <Button onClick={logout} color="inherit">
+            <Button id="logout-button" onClick={logout} color="inherit">
               Logout
             </Button>
           </Box>

@@ -1,35 +1,50 @@
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
-
-const Blog = ({ blog }) => {
-  const style = {
-    padding: 3,
-    margin: 5,
-    borderStyle: 'solid',
-    borderWidth: 1
-  }
-
-  return (
-    <div style={style} className="blog">
-      <Link to={`/blogs/${blog.id}`}>
-        {blog.title} {blog.author}
-      </Link>
-    </div>
-  )
-}
+import {
+  Grid,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemButton
+} from '@mui/material'
 
 const Blogs = () => {
   const blogs = useSelector((state) => state.blogs)
-  const user = useSelector((state) => state.user)
   const byLikes = (b1, b2) => b2.likes - b1.likes
   const sortedBlogs = [...blogs].sort(byLikes)
 
   return (
-    <div id="blogs">
-      {sortedBlogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} user={user} />
-      ))}
-    </div>
+    <Grid item xs={10}>
+      <List>
+        {sortedBlogs.map((blog) => (
+          <ListItemButton
+            sx={{
+              bgcolor: 'background.paper',
+              boxShadow: 2,
+              borderRadius: 2,
+              m: 1,
+              p: 1
+            }}
+            component={Link}
+            to={`/blogs/${blog.id}`}
+            key={blog.id}
+          >
+            <ListItem>
+              <ListItemText
+                className="itemInlist"
+                primary={`${blog.title}`}
+                secondary={`${blog.author}`}
+              />
+              <ListItemText
+                sx={{ display: { xs: 'none', md: 'grid' } }}
+                align={'right'}
+                primary={`added by ${blog.user.name}`}
+              />
+            </ListItem>
+          </ListItemButton>
+        ))}
+      </List>
+    </Grid>
   )
 }
 

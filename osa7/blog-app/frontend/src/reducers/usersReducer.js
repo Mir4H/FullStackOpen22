@@ -30,7 +30,6 @@ export const createUser = (content) => {
     try {
       const newUser = await usersService.create(content)
       await dispatch(appendUsers(newUser))
-      console.log(newUser)
       dispatch(loginUser(content.username, content.password))
     } catch (error) {
       dispatch(setNotify(`${error.response.data.error}`, 7, 'alert'))

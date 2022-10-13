@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { createUser } from '../reducers/usersReducer'
+import { TextField, Button } from '@mui/material/'
 
 const UserForm = () => {
   const [username, setUsername] = useState('')
@@ -18,36 +19,37 @@ const UserForm = () => {
   }
   return (
     <div>
-      <h2>Create account</h2>
-
       <form onSubmit={handleSubmit}>
-        <div>
-          username
-          <input
-            value={username}
-            onChange={({ target }) => setUsername(target.value)}
-            id="usernameInput"
-          />
-        </div>
-        <div>
-          name
-          <input
-            value={name}
-            onChange={({ target }) => setName(target.value)}
-            id="nameInput"
-          />
-        </div>
-        <div>
-          password
-          <input
-            value={password}
-            onChange={({ target }) => setPassword(target.value)}
-            id="passwordInput"
-          />
-        </div>
-        <button id="create-button" type="submit">
+        <TextField
+          sx={{ m: 1 }}
+          label="username"
+          value={username}
+          onChange={({ target }) => setUsername(target.value)}
+          id="usernameInput"
+        />
+        <TextField
+          sx={{ m: 1 }}
+          label="name"
+          value={name}
+          onChange={({ target }) => setName(target.value)}
+          id="nameInput"
+        />
+        <TextField
+          sx={{ m: 1 }}
+          label="password"
+          value={password}
+          onChange={({ target }) => setPassword(target.value)}
+          id="passwordInput"
+        />
+        <Button
+          sx={{ m: 1 }}
+          variant="outlined"
+          size="medium"
+          id="create-button"
+          type="submit"
+        >
           create
-        </button>
+        </Button>
       </form>
     </div>
   )

@@ -63,7 +63,9 @@ router.put('/:id', async (request, response) => {
     new: true,
     runValidators: true,
     context: 'query'
-  }).populate('user', { username: 1, name: 1 })
+  })
+    .populate('user', { username: 1, name: 1 })
+    .populate('comments', { content: 1 })
 
   response.json(updatedBlog)
 })

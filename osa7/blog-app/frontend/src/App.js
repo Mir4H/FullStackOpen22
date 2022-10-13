@@ -1,30 +1,31 @@
-/* eslint-disable no-unused-vars */
-import { useEffect, useRef } from 'react'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { useEffect } from 'react'
+import {
+  Navigate,
+  // eslint-disable-next-line no-unused-vars
+  BrowserRouter as Router,
+  Routes,
+  Route
+} from 'react-router-dom'
 
 import { useDispatch, useSelector } from 'react-redux'
 import { initialBlogs } from './reducers/blogsReducer'
 import { initialUsers } from './reducers/usersReducer'
 import { userData } from './reducers/userReducer'
-
 import userService from './services/user'
 
 import LoginForm from './components/LoginForm'
 import Notification from './components/Notification'
-import Togglable from './components/Togglable'
-import UserForm from './components/UserFrom'
 import Home from './components/Home'
 import Users from './components/Users'
 import UserDetails from './components/UserDetails'
-
 import BlogDetails from './components/BlogDetails'
 import PageNotFound from './components/PageNotFound'
-
-import { Container } from '@mui/material'
 import MenuBar from './components/MenuBar'
 
+import { styled } from '@mui/material/styles'
+import Paper from '@mui/material/Paper'
+
 const App = () => {
-  const accountRef = useRef()
   const dispatch = useDispatch()
   const user = useSelector((state) => state.user)
 
@@ -40,30 +41,43 @@ const App = () => {
     }
   }, [])
 
-  if (user === null) {
-    return (
-      <Container>
-        <Notification />
-        <LoginForm />
-        <Togglable buttonLabel="create account" ref={accountRef}>
-          <UserForm />
-        </Togglable>
-      </Container>
-    )
-  }
+  const Item = styled(Paper)(({ theme }) => ({
+    backgroundColor: theme.palette.background.paper,
+    fontFamily: theme.typography.fontFamily,
+    padding: theme.spacing(6),
+    color: theme.palette.text.secondary
+  }))
 
   return (
-    <Container>
+    <>
       <MenuBar />
       <Notification />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/users" element={<Users />} />
-        <Route path="/users/:id" element={<UserDetails />} />
-        <Route path="/blogs/:id" element={<BlogDetails />} />
-        <Route path="*" element={<PageNotFound />} />
-      </Routes>
-    </Container>
+      <Item>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              user !== null ? <Home /> : <Navigate replace to="/login" />
+            }
+          />
+          <Route
+            path="/users"
+            element={
+              user !== null ? <Users /> : <Navigate replace to="/login" />
+            }
+          />
+          <Route
+            path="/login"
+            element={
+              user === null ? <LoginForm /> : <Navigate replace to="/" />
+            }
+          />
+          <Route path="/users/:id" element={<UserDetails />} />
+          <Route path="/blogs/:id" element={<BlogDetails />} />
+          <Route path="*" element={<PageNotFound />} />
+        </Routes>
+      </Item>
+    </>
   )
 }
 
