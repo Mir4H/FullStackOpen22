@@ -120,9 +120,7 @@ const typeDefs = gql`
       published: Int!
       genres: [String!]
     ): Book
-  }
-  type Mutation {
-    editAuthor(name: String!, id: ID, setBornTo: Int, bookCount: Int): Author
+    editAuthor(name: String!, born: Int!): Author
   }
 `
 
@@ -164,7 +162,7 @@ const resolvers = {
       if (!authorToEdit) {
         return null
       }
-      const updatedAuthor = { ...authorToEdit, born: args.setBornTo }
+      const updatedAuthor = { ...authorToEdit, born: args.born }
       authors = authors.map((a) => (a.name === args.name ? updatedAuthor : a))
       return updatedAuthor
     },
