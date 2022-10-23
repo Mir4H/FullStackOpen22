@@ -11,8 +11,12 @@
   "author": "Mira",
   "license": "ISC",
   "dependencies": {
+    "apollo-link-context": "^1.0.20",
     "apollo-server": "^3.10.3",
+    "dotenv": "^16.0.3",
     "graphql": "^16.6.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.6.5",
     "uuid": "^9.0.0"
   },
   "devDependencies": {

@@ -1,25 +1,39 @@
 import { useState } from "react"
 import { EDIT_AUTHOR, ALL_AUTHORS } from "../queries"
 import { useMutation } from "@apollo/client"
+import { useQuery } from "@apollo/client"
 
-const Authors = ({show, authors}) => {
+const Authors = ({show, setError}) => {
   const [name, setName] = useState('')
   const [born, setBorn] = useState('')
+  const result = useQuery(ALL_AUTHORS)
 
   const [ editAuthor ] = useMutation(EDIT_AUTHOR, {
     refetchQueries: [ {query: ALL_AUTHORS} ],
+    onError: (error) => {
+      setError(error.graphQLErrors[0].message)
+    }
   })
+
+  if (result.loading)  {
+    return <div>loading...</div>
+  }
 
   if (!show) {
     return null
   }
 
+  const authors = result.data.allAuthors
+
   const handleSubmit = (event) => {
     event.preventDefault()
-    editAuthor( { variables: { name, born: parseInt(born) }})
-
-    setName('')
-    setBorn('')
+    if (born === '') {
+      setError("birth year must be defined") 
+    } else {
+      editAuthor( { variables: { name, born: parseInt(born) }})
+      setName('')
+      setBorn('')
+    }
   }
 
   return (
