@@ -3,13 +3,13 @@ import { useQuery } from "@apollo/client"
 import { ALL_BOOKS } from "../queries"
 
 const Books = ({show}) => {
-  const [genreToShow, setGenreToShow] = useState(null)
+  const [shownGenre, setShownGenre] = useState(null)
 
-  const result = useQuery(ALL_BOOKS, { 
-    variables: {genre: genreToShow}
+  const {loading, data, refetch} = useQuery(ALL_BOOKS, { 
+    variables: {genre: null}
   })
 
-  if (result.loading)  {
+  if (loading)  {
     return <div>loading...</div>
   }
 
@@ -17,19 +17,22 @@ const Books = ({show}) => {
     return null
   }
 
-  const books = result.data.allBooks
+  const books = data.allBooks
 
-  let genreList = []
-  books.forEach(book => {
-    const filteredGenres = book.genres.filter(g => genreList.indexOf(g) < 0)
-    genreList = genreList.concat(filteredGenres)
-  })
+  const genres = books.map(book => book.genres).reduce((prev, curr) =>  prev.concat(curr), []).reduce((value, currentValue) => {
+    return !value.includes(currentValue) ? [...value, currentValue] : value
+  }, [])
+  console.log(genres)
 
+  const showGenre = (genre) => {
+    setShownGenre(genre)
+    refetch({ genre: genre })
+  }
 
   return (
     <div>
       <h2>books</h2>
-      {genreToShow ? <p>Showing books of genre: {genreToShow}</p> : null }
+      {shownGenre ? <p>Showing books of genre: {shownGenre}</p> : null }
       {books.length !== 0 ? <table>
         <tbody>
           <tr>
@@ -49,11 +52,11 @@ const Books = ({show}) => {
       <p>No books added yet. Maybe add one?</p>}
       <div>
         <h3>filter by genre:</h3>
-        {genreList.map((genre, index) => (
-          <button onClick={() => setGenreToShow(genre)} key={index}>{genre}</button>
+        {genres.map((genre, index) => (
+          <button onClick={() => showGenre(genre)} key={index}>{genre}</button>
         ))
       }
-      <button onClick={() => setGenreToShow(null)}>All Books</button>
+      <button onClick={() => refetch({ genre: null })}>All Books</button>
       </div>
     </div>
   )

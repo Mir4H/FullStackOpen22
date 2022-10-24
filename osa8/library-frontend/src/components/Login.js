@@ -23,9 +23,9 @@ const Login = ({show, setPage, setToken, setError}) => {
     }
   }, [result.data]) // eslint-disable-line
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
-    login({ variables: {username, password}})
+    await login({ variables: {username, password}})
     setUsername('')
     setPage('authors')
     }

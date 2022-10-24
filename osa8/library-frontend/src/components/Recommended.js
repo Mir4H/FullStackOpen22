@@ -4,12 +4,12 @@ import { ALL_BOOKS, CURRENT_USER } from "../queries"
 
 const Recommended = ({show}) => {
   const userdata = useQuery(CURRENT_USER)
-  const result = useQuery(ALL_BOOKS, {
+  const {loading, data} = useQuery(ALL_BOOKS, {
     skip: !userdata.data?.me?.favoriteGenre,
     variables: { genre: userdata.data?.me?.favoriteGenre }
   })
 
-  if (result.loading || userdata.loading)  {
+  if (loading || userdata.loading)  {
     return <div>loading...</div>
   }
 
@@ -17,7 +17,7 @@ const Recommended = ({show}) => {
     return null
   }
 
-  const books = result?.data?.allBooks
+  const books = data?.allBooks
 
     return (
       <div>

@@ -25,12 +25,12 @@ const Authors = ({show, setError}) => {
 
   const authors = result.data.allAuthors
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
     if (born === '') {
       setError("birth year must be defined") 
     } else {
-      editAuthor( { variables: { name, born: parseInt(born) }})
+      await editAuthor( { variables: { name, born: parseInt(born) }})
       setName('')
       setBorn('')
     }
@@ -60,6 +60,7 @@ const Authors = ({show, setError}) => {
       <form onSubmit={handleSubmit}>
         <div><label>
       name <select value={name} onChange={({ target }) => setName(target.value)}>
+      <option value={null} defaultValue disabled hidden></option>
       {authors.map((a) => (
             <option key={a.name} value={a.name}>{a.name}</option>))}
       </select>

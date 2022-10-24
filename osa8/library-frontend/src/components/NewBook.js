@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useLazyQuery, useMutation } from '@apollo/client'
-import { ADD_BOOK, ALL_BOOKS } from '../queries'
+import { ADD_BOOK, ALL_AUTHORS, ALL_BOOKS } from '../queries'
 
 const NewBook = ({show, setPage, setError}) => {
   const [title, setTitle] = useState('')
@@ -9,22 +9,12 @@ const NewBook = ({show, setPage, setError}) => {
   const [genre, setGenre] = useState('')
   const [genres, setGenres] = useState([])
 
-  const [ addBook, result ] = useMutation(ADD_BOOK, {
+  const [ addBook ] = useMutation(ADD_BOOK, {
+    refetchQueries: [{query: ALL_BOOKS}, {query: ALL_AUTHORS}],
     onError: (error) => {
       setError(error.graphQLErrors[0].message)
     }
   })
-
-  const [currentBooks] = useLazyQuery(ALL_BOOKS, {
-    variables: {genre: null},
-    fetchPolicy: 'network-only'
-  })
-  
-  useEffect(() => {
-    if ( result.data ) {
-      currentBooks()
-    }
-  }, [result.data]) // eslint-disable-line
 
   if (!show) {
     return null
@@ -34,7 +24,7 @@ const NewBook = ({show, setPage, setError}) => {
     event.preventDefault()
 
     console.log('add book...')
-    addBook( { variables: { title, published: parseInt(published), author, genres }})
+    await addBook( { variables: { title, published: parseInt(published), author, genres }})
     setTitle('')
     setPublished('')
     setAuthor('')

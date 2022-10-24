@@ -4,7 +4,8 @@ import Books from './components/Books'
 import NewBook from './components/NewBook'
 import Login from './components/Login'
 import Recommended from './components/Recommended'
-import { useApolloClient } from '@apollo/client'
+import { ALL_BOOKS, BOOK_ADDED } from './queries'
+import { useSubscription, useApolloClient } from '@apollo/client'
 
 const ShowMsg = ({ msg }) => {
   if (!msg) {
@@ -33,32 +34,35 @@ const App = () => {
     client.resetStore()
 
   }
+  
+  useSubscription(BOOK_ADDED, {
+    onSubscriptionData: ({ subscriptionData }) => {
+      const bookAdded = subscriptionData.data.bookAdded
+      notification(`${bookAdded.title} added`)
 
-  const showrecommended = () => {
-    setPage('recommended')
-    
-  }
-
-  const showBooks = () => {
-    setPage('books')
-  }
-
+      client.cache.updateQuery({ query: ALL_BOOKS, variables: {genre: null} }, ({allBooks}) => {
+        return {
+          allBooks: allBooks.concat(bookAdded),
+        }
+      })
+    }
+  })
 
   return (
     <div>
       <div>
         <ShowMsg msg={msg} />
         <button onClick={() => setPage('authors')}>authors</button>
-        <button onClick={showBooks}>books</button>
+        <button onClick={() => setPage('books')}>books</button>
         {!token ? <button onClick={() => setPage('login')}>login</button> : null}
         {!token ? null : <>
         <button onClick={() => setPage('add')}>add book</button>
-        <button onClick={showrecommended}>recommended</button>
-        <button onClick={logoutUser}>logout</button>
+        <button onClick={() => setPage('recommended')}>recommended</button>
+        <button onClick={(logoutUser)}>logout</button>
         </>}
       </div>
 
-      <Authors show={page === 'authors'} setError={notification}/>
+      <Authors show={page === 'authors'} setError={notification} />
       <Books show={page === 'books'} />
       <NewBook show={page === 'add'} setPage={setPage} setError={notification}/>
       <Login show={page === 'login'} setPage={setPage} setToken={setToken} setError={notification}/>
