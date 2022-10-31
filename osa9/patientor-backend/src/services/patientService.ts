@@ -1,5 +1,6 @@
 import patientData from '../../data/patients';
-import { PatientEntry, OmitSsn } from '../types';
+import { PatientEntry, OmitSsn, NewPatientEntry } from '../types';
+import { v1 as uuid } from 'uuid';
 
 const getEntries = (): Array<PatientEntry> => {
     return patientData;
@@ -15,4 +16,14 @@ const getAllButSsn = (): OmitSsn[] => {
     }));
 };
 
-export default {getEntries, getAllButSsn};
+const addPatient = (entry: NewPatientEntry): PatientEntry => {
+    const newPatient = {
+        id: uuid(),
+        ...entry
+    };
+
+    patientData.push(newPatient);
+    return newPatient;
+};
+
+export default {addPatient, getEntries, getAllButSsn};

@@ -3,7 +3,7 @@ const app = express();
 import cors from 'cors';
 import diagnoseRouter from './routes/diagnoses';
 import patientRouter from './routes/patients';
-
+app.use(express.json());
 const allowedOrigins = 'http://localhost:3000';
 
 const options: cors.CorsOptions = {
