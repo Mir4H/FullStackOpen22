@@ -7,6 +7,17 @@ router.get('/', (_req, res) => {
     res.send(patientService.getAllButSsn());
 });
 
+router.get('/:id', (req, res) => {
+    const id = req.params.id;
+    const patients = patientService.getEntries();
+    const patient = patients.find(p => p.id === id);
+    if (patient) {
+        res.json(patient);
+    } else {
+        res.status(404).json('Patient not found');
+    }
+});
+
 router.post('/', (req, res) => {
     try {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
@@ -21,5 +32,6 @@ router.post('/', (req, res) => {
         res.status(400).send(errorMessage);
     }
 });
+
 
 export default router;

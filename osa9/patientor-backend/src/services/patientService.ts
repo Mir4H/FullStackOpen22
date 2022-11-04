@@ -1,12 +1,12 @@
 import patientData from '../../data/patients';
-import { PatientEntry, OmitSsn, NewPatientEntry } from '../types';
+import { PublicPatient, NewPatientEntry, Patient } from '../types';
 import { v1 as uuid } from 'uuid';
 
-const getEntries = (): Array<PatientEntry> => {
+const getEntries = (): Array<Patient> => {
     return patientData;
 };
 
-const getAllButSsn = (): OmitSsn[] => {
+const getPublicPatient = (): PublicPatient[] => {
     return patientData.map(({ id, name, dateOfBirth, gender, occupation}) => ({
         id,
         name,
@@ -16,9 +16,10 @@ const getAllButSsn = (): OmitSsn[] => {
     }));
 };
 
-const addPatient = (entry: NewPatientEntry): PatientEntry => {
+const addPatient = (entry: NewPatientEntry): Patient => {
     const newPatient = {
         id: uuid(),
+        entries: [],
         ...entry
     };
 
@@ -26,4 +27,4 @@ const addPatient = (entry: NewPatientEntry): PatientEntry => {
     return newPatient;
 };
 
-export default {addPatient, getEntries, getAllButSsn};
+export default {addPatient, getEntries, getAllButSsn: getPublicPatient};
