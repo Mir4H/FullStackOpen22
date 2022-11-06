@@ -1,17 +1,16 @@
-
 interface BaseEntry {
   id: string;
   description: string;
   date: string;
   specialist: string;
-  diagnosisCodes?: Array<DiagnoseEntry['code']>;
+  diagnosisCodes?: Array<DiagnoseEntry["code"]>;
 }
 
 export enum HealthCheckRating {
   "Healthy" = 0,
   "LowRisk" = 1,
   "HighRisk" = 2,
-  "CriticalRisk" = 3
+  "CriticalRisk" = 3,
 }
 
 interface HealthCheckEntry extends BaseEntry {
@@ -19,15 +18,25 @@ interface HealthCheckEntry extends BaseEntry {
   healthCheckRating: HealthCheckRating;
 }
 
+interface SickLeave {
+  startDate: string;
+  endDate: string;
+}
+
 interface OccupationalHealthcareEntry extends BaseEntry {
   type: "OccupationalHealthcare";
   employerName: string;
-  sickLeave?: object;
+  sickLeave?: SickLeave;
+}
+
+interface Discharge {
+  date: string;
+  criteria: string;
 }
 
 interface HospitalEntry extends BaseEntry {
   type: "Hospital";
-  discharge: object;
+  discharge: Discharge;
 }
 
 export type Entry =
@@ -36,28 +45,28 @@ export type Entry =
   | HealthCheckEntry;
 
 export interface DiagnoseEntry {
-    code: string;
-    name: string;
-    latin?: string;
-  }
-
-export interface PatientEntry {
-  id: string,
-  name: string,
-  dateOfBirth: string,
-  ssn: string,
-  gender: Gender,
-  occupation: string
+  code: string;
+  name: string;
+  latin?: string;
 }
 
-export type OmitSsn = Omit<PatientEntry, 'ssn'>;
+export interface PatientEntry {
+  id: string;
+  name: string;
+  dateOfBirth: string;
+  ssn: string;
+  gender: Gender;
+  occupation: string;
+}
 
-export type NewPatientEntry = Omit<PatientEntry, 'id'>;
+export type OmitSsn = Omit<PatientEntry, "ssn">;
+
+export type NewPatientEntry = Omit<PatientEntry, "id">;
 
 export enum Gender {
-  Male = 'male',
-  Female = 'female',
-  Other = 'other',
+  Male = "male",
+  Female = "female",
+  Other = "other",
 }
 
 export interface Patient {
@@ -70,4 +79,4 @@ export interface Patient {
   entries: Entry[];
 }
 
-export type PublicPatient = Omit<Patient, 'ssn' | 'entries'>;
+export type PublicPatient = Omit<Patient, "ssn" | "entries">;
