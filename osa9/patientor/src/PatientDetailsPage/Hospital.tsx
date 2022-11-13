@@ -3,20 +3,22 @@ import LocalHospitalIcon from "@mui/icons-material/LocalHospital";
 
 const Hospital = (entry: HospitalEntry) => {
   return (
-    <p>
+    <div>
       <LocalHospitalIcon /> <b>Hospital visit</b>
       <br />
       {entry.date}
       <br />
       <i>{entry.description}</i>
-      <p>
-        <b>Discharge</b>
-        <br />
-        date: {entry.discharge.date}
-        <br />
-        criteria: {entry.discharge.criteria}
-      </p>
-    </p>
+      {entry.discharge ? (
+        <p>
+          <b>Discharge</b>
+          <br />
+          date: {entry.discharge.date}
+          <br />
+          criteria: {entry.discharge.criteria}
+        </p>
+      ) : null}
+    </div>
   );
 };
 

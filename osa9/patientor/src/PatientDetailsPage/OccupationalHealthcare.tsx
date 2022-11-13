@@ -3,7 +3,7 @@ import HealthAndSafetyIcon from "@mui/icons-material/HealthAndSafety";
 
 const OccupationalHealthcare = (entry: OccupationalHealthcareEntry) => {
   return (
-    <p>
+    <div>
       <HealthAndSafetyIcon /> <b>Occupational Healthcare visit</b>
       <br />
       {entry.date}
@@ -13,14 +13,14 @@ const OccupationalHealthcare = (entry: OccupationalHealthcareEntry) => {
       <p>
         Employer: {entry.employerName}
         <br />
-        {entry.sickLeave ? (
+        {entry.sickLeave?.startDate ? (
           <>
             Sickleave: from {entry.sickLeave.startDate} to{" "}
             {entry.sickLeave.endDate}
           </>
         ) : null}
       </p>
-    </p>
+    </div>
   );
 };
 

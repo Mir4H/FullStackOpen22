@@ -45,14 +45,14 @@ export interface OccupationalHealthcareEntry extends BaseEntry {
   sickLeave?: SickLeave;
 }
 
-interface Discharge {
+export interface Discharge {
   date: string;
   criteria: string;
 }
 
 export interface HospitalEntry extends BaseEntry {
   type: "Hospital";
-  discharge: Discharge;
+  discharge?: Discharge;
 }
 
 export type Entry =
@@ -65,3 +65,58 @@ export interface DiagnoseEntry {
   name: string;
   latin?: string;
 }
+
+export enum Type {
+  Hospital = "Hospital",
+  OccupationalHealthcare = "OccupationalHealthcare",
+  HealthCheck = "HealthCheck",
+}
+
+export type FieldPropTypes =
+  | SelectFieldTypeProps
+  | SelectFieldProps
+  | SelectFieldRatingProps;
+
+//Types for add patient form
+
+export type GenderOption = {
+  value: Gender;
+  label: string;
+};
+
+export type SelectFieldProps = {
+  name: string;
+  label: string;
+  options: GenderOption[];
+};
+
+export type PatientFormValues = Omit<Patient, "id" | "entries">;
+
+//Types for add entry form
+
+type UnionOmit<T, K extends string | number | symbol> = T extends unknown
+  ? Omit<T, K>
+  : never;
+export type EntryFormValues = UnionOmit<Entry, "id">;
+
+export type TypeOption = {
+  value: Type;
+  label: string;
+};
+
+export type SelectFieldTypeProps = {
+  name: string;
+  label: string;
+  options: TypeOption[];
+};
+
+export type RatingOption = {
+  value: HealthCheckRating;
+  label: string;
+};
+
+export type SelectFieldRatingProps = {
+  name: string;
+  label: string;
+  options: RatingOption[];
+};

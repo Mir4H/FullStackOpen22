@@ -2,14 +2,8 @@ import React from "react";
 import { Grid, Button } from "@material-ui/core";
 import { Field, Formik, Form } from "formik";
 
-import { TextField, SelectField, GenderOption } from "./FormField";
-import { Gender, Patient } from "../types";
-
-/*
- * use type Patient, but omit id and entries,
- * because those are irrelevant for new patient object.
- */
-export type PatientFormValues = Omit<Patient, "id" | "entries">;
+import { TextField, SelectField } from "./FormField";
+import { Gender, GenderOption, PatientFormValues } from "../types";
 
 interface Props {
   onSubmit: (values: PatientFormValues) => void;

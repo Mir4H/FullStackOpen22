@@ -14,7 +14,7 @@ const PatientEntryDetails = (patient: Patient) => {
           <Box sx={{ mb: 2 }}>
             <Paper sx={{ px: 2 }} elevation={2}>
               <EntryDetails entry={entry} />
-              {entry.diagnosisCodes ? (
+              {entry.diagnosisCodes?.length !== 0 ? (
                 <>
                   <b>Diagnoses</b>
                   <ul>

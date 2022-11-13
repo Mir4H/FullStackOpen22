@@ -7,28 +7,15 @@ import {
   TextField as TextFieldMUI,
   Typography,
 } from "@material-ui/core";
-import { DiagnoseEntry, Gender } from "../types";
+import { DiagnoseEntry, FieldPropTypes } from "../types";
 import { InputLabel } from "@material-ui/core";
 import Input from "@material-ui/core/Input";
-
-// structure of a single option
-export type GenderOption = {
-  value: Gender;
-  label: string;
-};
-
-// props for select field component
-type SelectFieldProps = {
-  name: string;
-  label: string;
-  options: GenderOption[];
-};
 
 const FormikSelect = ({ field, ...props }: FieldProps) => (
   <Select {...field} {...props} />
 );
 
-export const SelectField = ({ name, label, options }: SelectFieldProps) => (
+export const SelectField = ({ name, label, options }: FieldPropTypes) => (
   <>
     <InputLabel>{label}</InputLabel>
     <Field
@@ -66,9 +53,6 @@ export const TextField = ({ field, label, placeholder }: TextProps) => (
   </div>
 );
 
-/*
-  for exercises 9.24.-
-*/
 interface NumberProps extends FieldProps {
   label: string;
   min: number;
